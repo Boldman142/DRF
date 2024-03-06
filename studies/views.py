@@ -4,7 +4,7 @@ from studies.models import Course, Lesson
 from studies.serliazers import CourseSerializers, LessonSerializers
 
 
-class CarViewSet(viewsets.ModelViewSet):
+class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializers
     queryset = Course.objects.all()
 
