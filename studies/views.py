@@ -2,7 +2,7 @@ from rest_framework import viewsets, generics
 from rest_framework.response import Response
 
 from studies.models import Course, Lesson
-from studies.serliazers import CourseSerializer, LessonSerializer, CourseListSerializer
+from studies.serliazers import CourseSerializer, LessonSerializer
 
 
 class CourseViewSet(viewsets.ModelViewSet):

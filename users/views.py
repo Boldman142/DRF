@@ -2,17 +2,26 @@
 # from django.contrib.auth.views import LogoutView as BaseLogout
 # from django.views.generic import CreateView, UpdateView
 # from django.urls import reverse_lazy
+from django_filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets, generics
+# from rest_framework import viewsets
 
-from rest_framework import viewsets
+from users.models import User, Pays
+from users.serliazers import UserSerializer, PaysSerializer
 
-from users.models import User
-from users.serliazers import UserSerializer
+
+class PaysListApiView(generics.ListAPIView):
+    serializer_class = PaysSerializer
+    queryset = Pays.objects.all()
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_field = ('date_pay', 'pay_course', 'pay_lesson', 'way_pay')
+    ordering_fields = ('date_pay',)
 
 
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-
 
 # class LoginView(BaseLogin):
 #     pass
