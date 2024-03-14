@@ -5,11 +5,12 @@ from studies.views import (CourseViewSet, LessonCreateAPIView, LessonListAPIView
 
 from studies.apps import StudiesConfig
 from rest_framework.routers import DefaultRouter
+from rest_framework import routers
 
 app_name = StudiesConfig.name
 
-router = DefaultRouter()
-router.register(r'course', CourseViewSet, basename='course')
+# router = DefaultRouter()
+
 
 urlpatterns = [
     path('lesson/create/', LessonCreateAPIView.as_view(), name='lesson-create'),
@@ -17,4 +18,9 @@ urlpatterns = [
     path('lesson/<int:pk>/', LessonRetrieveAPIView.as_view(), name='lesson-get'),
     path('lesson/update/<int:pk>/', LessonUpdateAPIView.as_view(), name='lesson-update'),
     path('lesson/delete/<int:pk>/', LessonDestroyAPIView.as_view(), name='lesson-delete'),
-] + router.urls
+]
+
+router = routers.SimpleRouter()
+router.register(r'course', CourseViewSet)
+
+urlpatterns += router.urls
