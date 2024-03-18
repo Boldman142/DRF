@@ -1,5 +1,5 @@
 from rest_framework import viewsets, generics
-from rest_framework.response import Response
+# from rest_framework.response import Response
 
 from studies.models import Course, Lesson
 from studies.serliazers import CourseSerializer, LessonSerializer
