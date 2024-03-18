@@ -1,14 +1,11 @@
-# from django.contrib.auth.views import LoginView as BaseLogin
-# from django.contrib.auth.views import LogoutView as BaseLogout
-# from django.views.generic import CreateView, UpdateView
-# from django.urls import reverse_lazy
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter, OrderingFilter
-# from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
+
 from rest_framework import viewsets, generics
-# from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 
 from users.models import User, Pays
+from users.permissions import AccountOwner
 from users.serliazers import UserSerializer, PaysSerializer
 
 
@@ -24,22 +21,10 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
-# class LoginView(BaseLogin):
-#     pass
-#
-#
-# class LogoutView(BaseLogout):
-#     pass
-#
-#
-# class RegisterView(CreateView):
-#     model = User
-#     success_url = reverse_lazy('users:login')
-#
-#
-# class UserUpdateView(UpdateView):
-#     model = User
-#     success_url = reverse_lazy('users:profile')
-#
-#     def get_object(self, queryset=None):
-#         return self.request.user
+    def get_permissions(self):
+        if self.action is not 'CREATE':
+            self.permission_classes = [IsAuthenticated]
+            if self.action in ['PUT', 'PATCH']:
+                self.permission_classes = [IsAuthenticated, AccountOwner]
+
+        return super().get_permissions()

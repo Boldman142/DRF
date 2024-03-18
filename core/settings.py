@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 import os
 
@@ -43,9 +43,11 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'django_filters',
+    'rest_framework_simplejwt',
 
     'users',
     'studies',
+    'auth_api',
 
 ]
 
@@ -153,8 +155,19 @@ CACHES = {
     }
 }
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_FILTER_BACKENDS': (
-#         'django_filters.rest_framework.DjangoFilterBackend'
-#     ),
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #    'rest_framework.permissions.AllowAny',
+    # ),
+    #     'DEFAULT_FILTER_BACKENDS': (
+    #         'django_filters.rest_framework.DjangoFilterBackend'
+    #     ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}

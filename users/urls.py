@@ -15,6 +15,6 @@ urlpatterns = [
     # path('profile/', UserUpdateView.as_view(), name='profile')
 ]
 router = routers.SimpleRouter()
-router.register(r'users', UserViewSet)
+router.register(r'user', UserViewSet)
 
 urlpatterns += router.urls
