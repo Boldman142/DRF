@@ -28,3 +28,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 self.permission_classes = [IsAuthenticated, AccountOwner]
 
         return super().get_permissions()
+
+    # def update(self, request, *args, **kwargs):
+    #     user = request.user
+    #     course_id =
