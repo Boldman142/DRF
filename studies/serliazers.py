@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 
-from studies.models import Course, Lesson
+from studies.models import Course, Lesson, Subscription
 from studies.validators import UrlValidator
 
 
@@ -10,29 +10,6 @@ class LessonSerializer(serializers.ModelSerializer):
         model = Lesson
         fields = '__all__'
         validators = [UrlValidator(field='video')]
-
-
-# class LessonAllSerializer(serializers.ModelSerializer):
-#     count = serializers.SerializerMethodField()
-#     lesson = SlugRelatedField(slug_field='lesson', queryset=Lesson.objects.all())
-#     def get_count(self, obj):
-#         return obj.lesson.count()
-#
-#     class Meta:
-#         model = Lesson
-#         fields = ('count', 'lesson')
-
-
-# class CourseListSerializer(serializers.ModelSerializer):
-#     lesson_count = serializers.SerializerMethodField()
-#     lesson = SlugRelatedField(slug_field='lesson', queryset=Lesson.objects.all())
-#
-#     def get_lesson_count(self, obj):
-#         return obj.lesson_set.count()
-#
-#     class Meta:
-#         model = Course
-#         fields = ('name', 'lesson_count', 'lesson', 'overview', 'picture')
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -45,3 +22,9 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ('name', 'lesson_count', 'lesson', 'overview', 'picture', 'owner')
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = '__all__'

@@ -39,10 +39,9 @@ class Lesson(models.Model):
 
 class Subscription(models.Model):
     course = models.ForeignKey('Course', verbose_name='Курс',
-                               on_delete=models.CASCADE, related_name='sub_course', **NULLABLE)
+                               on_delete=models.CASCADE, related_name='sub_course')
     owner = models.ForeignKey('users.User', verbose_name='подписчик',
-                              on_delete=models.CASCADE, **NULLABLE)
-    is_active = models.BooleanField(verbose_name='активна или нет', default=True)
+                              on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.owner} - {self.course}; {self.is_active}'
