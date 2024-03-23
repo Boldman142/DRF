@@ -17,7 +17,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     permission_classes = [IsAuthenticated]
-    pagination_class = ListPaginator
+    # pagination_class = ListPaginator
 
     def get_permissions(self):
         if self.action == 'CREATE':
@@ -43,11 +43,11 @@ class LessonCreateAPIView(generics.CreateAPIView):
 class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated, Moderator]
+    permission_classes = [IsAuthenticated, ~Moderator]
 
     filter_backends = [OrderingFilter]
     ordering_fields = ('id',)
-    pagination_class = ListPaginator
+    # pagination_class = ListPaginator
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
