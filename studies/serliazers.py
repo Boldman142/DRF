@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 
 from studies.models import Course, Lesson, Subscription
+from studies.services import convert_price
 from studies.validators import UrlValidator
 
 
@@ -15,13 +16,17 @@ class LessonSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     lesson_count = serializers.SerializerMethodField()
     lesson = LessonSerializer(many=True, read_only=True)
+    usd_price = serializers.SerializerMethodField()
 
     def get_lesson_count(self, obj):
         return obj.lesson.count()
 
+    def get_usd_price(self, instance):
+        return convert_price(instance.price)
+
     class Meta:
         model = Course
-        fields = ('name', 'lesson_count', 'lesson', 'overview', 'picture', 'owner')
+        fields = ('name', 'lesson_count', 'lesson', 'overview', 'picture', 'owner', 'usd_price')
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
