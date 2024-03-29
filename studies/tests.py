@@ -46,7 +46,7 @@ class LessonTestCase(APITestCase):
     def test_create_subscribe(self):
         """Тестирование создания подписки"""
         data = {
-            "course_id": 1
+            "course_id": self.course.id
         }
         response = self.client.post(
             '/studies/subscribe/',
@@ -72,8 +72,12 @@ class LessonTestCase(APITestCase):
     def test_get_lesson(self):
         """Тестирование просмотра урока"""
         response = self.client.get(
-            '/studies/lesson/1/'
+            reverse('studies:lesson-get', args=[self.lesson.id])
         )
+        # response = (
+        #     self.client.get(
+        #         '/studies/lesson/1/'
+        #     ))
 
         self.assertEqual(
             response.status_code,
@@ -88,9 +92,12 @@ class LessonTestCase(APITestCase):
         }
 
         response = self.client.put(
-            '/studies/lesson/update/1/',
-            data=data
+            reverse('studies:lesson-update', args=[self.lesson.id]), data
         )
+        # response = self.client.put(
+        #     '/studies/lesson/update/1/',
+        #     data=data
+        # )
 
         self.assertEqual(
             response.status_code,
@@ -100,11 +107,15 @@ class LessonTestCase(APITestCase):
     def test_delete_lesson(self):
         """Тестирование удаления урока"""
         response = self.client.delete(
-            '/studies/lesson/delete/1/',
+            reverse('studies:lesson-delete', args=[self.lesson.id])
         )
-        # print(self.user)
-        # print(self.lesson.owner)
-        # print(response.json())
+        # response = self.client.delete(
+        #     '/studies/lesson/delete/1/',
+        # )
+        print(self.client)
+        print(self.user)
+        print(self.lesson.owner)
+        print(response.json())
 
         self.assertEqual(
             response.status_code,
