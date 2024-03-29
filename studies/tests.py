@@ -112,12 +112,12 @@ class LessonTestCase(APITestCase):
         # response = self.client.delete(
         #     '/studies/lesson/delete/1/',
         # )
-        print(self.client)
-        print(self.user)
-        print(self.lesson.owner)
-        print(response.json())
+        # print(self.client)
+        # print(self.user)
+        # print(self.lesson.owner)
+        # print(response.json())
 
         self.assertEqual(
             response.status_code,
-            status.HTTP_200_OK
+            status.HTTP_204_NO_CONTENT
         )
