@@ -28,7 +28,7 @@ class UserViewSet(viewsets.ModelViewSet):
         new_user.save()
 
     def get_permissions(self):
-        if self.action is not 'create':
+        if self.action not in ['create']:
             self.permission_classes = [IsAuthenticated]
             if self.action in ['update', 'retrieve', 'destroy']:
                 self.permission_classes = [IsAuthenticated, AccountOwner]

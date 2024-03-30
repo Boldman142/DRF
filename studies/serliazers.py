@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.relations import SlugRelatedField
 
 from studies.models import Course, Lesson, Subscription
 from studies.services import convert_price
@@ -26,7 +25,8 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ('name', 'lesson_count', 'lesson', 'overview', 'picture', 'owner', 'usd_price')
+        fields = ('name', 'lesson_count',
+                  'lesson', 'overview', 'picture', 'owner', 'usd_price')
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):

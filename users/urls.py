@@ -1,7 +1,6 @@
 from django.urls import path
 from rest_framework import routers
 
-# from users.views import (LoginView) #, LogoutView, RegisterView, UserUpdateView)
 from users.views import UserViewSet, PaysListApiView
 
 from users.apps import UsersConfig

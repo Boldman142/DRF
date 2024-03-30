@@ -16,4 +16,3 @@ class Command(BaseCommand):
             summ_pay=30000,
             way_pay=0
         )
-

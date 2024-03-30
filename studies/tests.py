@@ -1,3 +1,4 @@
+from django.forms import model_to_dict
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -12,27 +13,25 @@ class LessonTestCase(APITestCase):
         self.user = User.objects.create(
             email='test5@test.ru'
         )
-        self.lesson = Lesson.objects.create(
-            name='Testovoe1',
-            overview='Test',
-            owner=self.user
-        )
         self.course = Course.objects.create(
             name='Testovoe21',
             overview='Test21',
             owner=self.user
         )
+        self.lesson = Lesson.objects.create(
+            name='Testovoe1',
+            overview='Test',
+            owner=self.user,
+            course=self.course
+        )
+
         self.client.force_authenticate(
             user=self.user
         )
 
     def test_create_lesson(self):
         """Тестирование создание урока"""
-        data = {
-            "name": "Testovoe",
-            "overview": "Opyat Testovoe"
-        }
-
+        data = model_to_dict(self.lesson, exclude=['picture', 'video'])
         response = self.client.post(
             '/studies/lesson/create/',
             data=data
@@ -74,10 +73,6 @@ class LessonTestCase(APITestCase):
         response = self.client.get(
             reverse('studies:lesson-get', args=[self.lesson.id])
         )
-        # response = (
-        #     self.client.get(
-        #         '/studies/lesson/1/'
-        #     ))
 
         self.assertEqual(
             response.status_code,
@@ -94,10 +89,6 @@ class LessonTestCase(APITestCase):
         response = self.client.put(
             reverse('studies:lesson-update', args=[self.lesson.id]), data
         )
-        # response = self.client.put(
-        #     '/studies/lesson/update/1/',
-        #     data=data
-        # )
 
         self.assertEqual(
             response.status_code,
@@ -106,16 +97,16 @@ class LessonTestCase(APITestCase):
 
     def test_delete_lesson(self):
         """Тестирование удаления урока"""
-        response = self.client.delete(
-            reverse('studies:lesson-delete', args=[self.lesson.id])
+        data = model_to_dict(self.lesson, exclude=['picture', 'video'])
+
+        response1 = self.client.post(
+            '/studies/lesson/create/',
+            data=data
         )
-        # response = self.client.delete(
-        #     '/studies/lesson/delete/1/',
-        # )
-        # print(self.client)
-        # print(self.user)
-        # print(self.lesson.owner)
-        # print(response.json())
+
+        response = self.client.delete(
+            reverse('studies:lesson-delete', args=[response1.json()['id']])
+        )
 
         self.assertEqual(
             response.status_code,

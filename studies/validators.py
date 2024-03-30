@@ -1,4 +1,3 @@
-import re
 from rest_framework.serializers import ValidationError
 
 
@@ -13,4 +12,3 @@ class UrlValidator:
             return
         if correct_data not in tmp_val:
             raise ValidationError('You can add url only from YOUTUBE')
-

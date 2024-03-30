@@ -1,9 +1,5 @@
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import viewsets, generics, status
-
-import requests
-from requests.exceptions import RequestException
-
+from rest_framework import viewsets, generics
 
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import get_object_or_404
@@ -14,8 +10,9 @@ from rest_framework.views import APIView
 
 from studies.models import Course, Lesson, Subscription
 from studies.paginators import ListPaginator
-from studies.serliazers import CourseSerializer, LessonSerializer, SubscriptionSerializer
+from studies.serliazers import CourseSerializer, LessonSerializer
 from studies.permissions import Moderator, IsOwner
+from studies.services import Stripe_API
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -75,13 +72,15 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
 class LessonDestroyAPIView(generics.DestroyAPIView):
     """APIView для удаления урока"""
     queryset = Lesson.objects.all()
-    # permission_classes = [IsAuthenticated, ~Moderator, IsOwner]
+    permission_classes = [IsAuthenticated, IsOwner | ~Moderator]
 
 
 class SubscriptionAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @swagger_auto_schema(operation_description="APIView для создания/удаления подписки на курс")
+    @swagger_auto_schema(
+        operation_description="APIView для создания/удаления подписки на курс"
+    )
     def post(self, request, *args, **kwargs):
         user = request.user
         course_id = request.data.get('course_id')
@@ -97,15 +96,17 @@ class SubscriptionAPIView(APIView):
         return Response({"message": message})
 
 
-# class SomeAPIView(APIView):
-#
-#     def get(self, *args, **kwargs):
-#         try:
-#             response = requests.get('https://api.example.com/data')
-#             response.raise_for_status()  # Проверка на ошибки HTTP
-#             data = response.json()
-#             # Обработка полученных данных
-#             return Response(data)
-#         except RequestException as e:
-#             # Обработка исключения
-#             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+class StripeAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, *args, **kwargs):
+        course_id = kwargs.get('pk')
+        course = get_object_or_404(Course, id=course_id)
+        stripe_API = Stripe_API()
+        if course.price_id is None or course.product_id is None:
+            price = stripe_API.create_product(course.name, course.price)
+            course.price_id = price['id']
+            course.product_id = price['product']
+            course.save()
+        session = stripe_API.create_session(course.price_id)
+        return Response({'url': session.url})
