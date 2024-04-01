@@ -14,6 +14,8 @@ from studies.serliazers import CourseSerializer, LessonSerializer
 from studies.permissions import Moderator, IsOwner
 from studies.services import Stripe_API
 
+from studies.tasks import send_mail_change
+
 
 class CourseViewSet(viewsets.ModelViewSet):
     """ViewSet для курсов """
@@ -31,6 +33,10 @@ class CourseViewSet(viewsets.ModelViewSet):
             self.permission_classes = [~Moderator, IsOwner]
 
         return super().get_permissions()
+
+    def update(self, request, *args, **kwargs):
+        super().update(request, *args, **kwargs)
+        send_mail_change.delay(request.get('id'))
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
