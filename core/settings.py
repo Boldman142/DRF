@@ -210,11 +210,11 @@ CELERY_TASK_TIME_LIMIT = os.getenv('CELERY_TASK_TIME_LIMIT')
 CELERY_BEAT_SCHEDULE = {
     "send_mail": {
         "task": "studies.tasks.send_mail_change",
-        "schedule": timedelta(hours=1),
+        "schedule": timedelta(minutes=1),
     },
     "deactivate_user": {
         "task": "users.tasks.deactivate_not_active",
-        "schedule": timedelta(days=1),
+        "schedule": timedelta(minutes=1),
     },
 }
 
