@@ -208,10 +208,10 @@ CELERY_TASK_TRACK_STARTED = os.getenv('CELERY_TASK_TRACK_STARTED')
 CELERY_TASK_TIME_LIMIT = os.getenv('CELERY_TASK_TIME_LIMIT')
 
 CELERY_BEAT_SCHEDULE = {
-    "send_mail": {
-        "task": "studies.tasks.send_mail_change",
-        "schedule": timedelta(minutes=1),
-    },
+    # "send_mail": {
+    #     "task": "studies.tasks.send_mail_change",
+    #     "schedule": timedelta(minutes=1),
+    # },
     "deactivate_user": {
         "task": "users.tasks.deactivate_not_active",
         "schedule": timedelta(minutes=1),

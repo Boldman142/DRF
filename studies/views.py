@@ -35,14 +35,16 @@ class CourseViewSet(viewsets.ModelViewSet):
         return super().get_permissions()
 
     def perform_update(self, serializer):
+        serializer.save()
+        pk = self.kwargs.get('pk')
         super().perform_update(serializer)
-        course_id = self.request.get['id']
-        send_mail_change.delay(course_id)
+        send_mail_change.delay(pk)
 
     # def update(self, request, *args, **kwargs):
     #     super().update(request, *args, **kwargs)
-    #     course_id = self.request.get('id')
+    #     course_id = request.data.get('id')
     #     send_mail_change.delay(course_id)
+
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
