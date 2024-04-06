@@ -1,6 +1,5 @@
-import datetime
-
 from celery import shared_task
+from django.utils import timezone
 
 from users.models import User
 
@@ -8,7 +7,7 @@ from users.models import User
 @shared_task
 def deactivate_not_active():
     users = User.objects.filter(is_active=True,
-                                last_login__lte=datetime.timezone.now() - datetime.timedelta(days=30))
+                                last_login__lt=timezone.now() - timezone.timedelta(days=30))
     users.update(is_active=False)
     # users = User.objects.filter(is_active=True)
     # date_now = datetime.date
