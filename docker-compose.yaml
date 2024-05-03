@@ -9,15 +9,18 @@ services:
   db:
     image: postgres
     environment:
-      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_PASSWORD="${PASSWORD_BD}"
+      - POSTGRES_USER="${USER_BD}"
+      - POSTGRES_DB="${NAME_BD}"
       - PGDATA=/var/lib/postgresql/data/pgdata
-
+    env_file:
+      - .env
     volumes:
       - pg_data:/var/lib/postgresql/data/pgdata
     ports:
-      - '5432:5432'
+      - '5432:${PORT_BD}'
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${USER_BD}" ]
       interval: 10s
       timeout: 5s
       retries: 5
