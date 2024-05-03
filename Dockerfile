@@ -10,8 +10,6 @@ COPY . .
 
 RUN pip install --upgrade pip
 
-RUN rm -rf env
-
 RUN python3 -m venv env
 
 RUN ./env/bin/activate
