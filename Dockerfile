@@ -23,3 +23,4 @@ CMD gunicorn -w 3 --chdir ./core core.wsgi --bind 0.0.0.0:8000
 #RUN pip install -r /core/requirements.txt
 #
 #COPY . .
+
